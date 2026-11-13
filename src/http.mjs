@@ -4,7 +4,8 @@ export async function listen(handler, port = 0) {
   const server = createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
-      const result = await handler(url, request);
+      const result = await handler(url, request, response);
+      if (result?.raw) return;
       const status = result.status ?? 200;
       const headers = { 'content-type': result.type ?? 'application/json; charset=utf-8', ...result.headers };
       response.writeHead(status, headers);
